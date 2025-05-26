@@ -111,6 +111,7 @@ import java.util.ArrayList;
     }
 
     public ArrayList<Game> getGamesByPrice(int price){
+        long timeI = System.nanoTime();
         ArrayList<Game> resultados = new ArrayList<>();
 
         if (sortedByAttribute.equals("precio")){
@@ -139,10 +140,13 @@ import java.util.ArrayList;
               }
           }
         }
+        long timeF = System.nanoTime();
+        long duration = (timeF - timeI);
         return resultados;
     }
 
     public ArrayList<Game> getGamesByPriceRange(int lowrPrice, int higherPrice){
+        long timeI = System.nanoTime();
         ArrayList<Game> resultados = new ArrayList<>();
         if (sortedByAttribute.equals("precio")){
          int inicio = BusquedaRangoprecio(lowrPrice, higherPrice);
@@ -161,10 +165,13 @@ import java.util.ArrayList;
                 }
             }
         }
+        long timeF = System.nanoTime();
+        long duration = (timeF - timeI);
         return resultados;
     }
 
     public ArrayList<Game> getGamesByCategory(String category){
+        long timeI = System.nanoTime();
         ArrayList<Game> resultados = new ArrayList<>();
 
         if (sortedByAttribute.equals("category")){
@@ -192,6 +199,8 @@ import java.util.ArrayList;
                 }
             }
         }
+        long timeF = System.nanoTime();
+        long duration = (timeF - timeI);
         return resultados;
 }
 
