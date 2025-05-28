@@ -1,1 +1,1 @@
-# Eda-lab3
+# Laboratorio 3 - EDA

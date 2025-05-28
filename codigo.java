@@ -1,33 +1,48 @@
 import java.util.ArrayList;
+import java.util.Random;
 
- class Game{
- private String name;
- private String category;
- private int price;
- private int quality;
+class Game{
+    private String name;
+    private String category;
+    private int price;
+    private int quality;
 
-  public Game(String name, String category, int price, int quality){
-      this.name = name;
-      this.category = category;
-      this.price = price;
-      this.quality = quality;
-  }
-   public String getName(){
+    public Game(String name, String category, int price, int quality){
+        this.name = name;
+        this.category = category;
+        this.price = price;
+        this.quality = quality;
+    }
+    public String getName(){
       return name;
-   }
-   public String getCategory(){
+    }
+    public String getCategory(){
       return category;
-   }
-   public int getPrice(){
+    }
+    public int getPrice(){
       return price;
-   }
-   public int getQuality(){
+    }
+    public int getQuality(){
       return quality;
 
    }
 }
 
- class Dataset{
+class GenerarData{
+    String[] palabras = {"Dragon", "Empire", "Quest", "Galaxy", "Legends", "Warrior"}
+    String[] categorias = {"Acción", "Aventura", "Estrategia", "RPG", "Deportes", "Simulación"}
+    Random randin = new Random();
+    int precio = randin.nextInt(70001);
+    int calidad = randin.nextInt(101);
+    public GenerarData(int NumeroJ){
+         ArrayList<Game> games = new ArrayList<>();
+         for (int i = 0; i < NumeroJ; i++){
+             games.add(new Game(palabras[randin.nextInt(palabras.length)], categorias[randin.nextInt(categorias.length)], precio, calidad));
+         }
+     }
+}
+
+class Dataset{
     private ArrayList<Game> data;
     private String sortedByAttribute;
 
