@@ -60,7 +60,10 @@ class Dataset {
         for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < n - i - 1; j++) {
                 if (data.get(j).getPrice() > data.get(j + 1).getPrice()) {
-                    swap(j, j + 1);
+                    Game temp = data.get(j);
+                    data.set(j, data.get(j + 1));
+                    data.set(j + 1, temp);
+
                 }
             }
         }
@@ -72,7 +75,10 @@ class Dataset {
         for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < n - i - 1; j++) {
                 if (data.get(j).getCategory().compareTo(data.get(j + 1).getCategory()) > 0) {
-                    swap(j, j + 1);
+                    Game temp = data.get(j);
+                    data.set(j, data.get(j + 1));
+                    data.set(j + 1, temp);
+
                 }
             }
         }
@@ -84,10 +90,28 @@ class Dataset {
         for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < n - i - 1; j++) {
                 if (data.get(j).getQuality() > data.get(j + 1).getQuality()) {
-                    swap(j, j + 1);
+                    Game temp = data.get(j);
+                    data.set(j, data.get(j + 1));
+                    data.set(j + 1, temp);
+
                 }
             }
         }
+        sortedByAttribute = "quality";
+    }
+
+    public void collectionsSortByPrice() {
+        Collections.sort(data, Comparator.comparingInt(Game::getPrice));
+        sortedByAttribute = "price";
+    }
+
+    public void collectionsSortByCategory() {
+        Collections.sort(data, Comparator.comparing(Game::getCategory));
+        sortedByAttribute = "category";
+    }
+
+    public void collectionsSortByQuality() {
+        Collections.sort(data, Comparator.comparingInt(Game::getQuality));
         sortedByAttribute = "quality";
     }
 
