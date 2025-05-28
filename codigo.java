@@ -115,6 +115,96 @@ class Dataset {
         sortedByAttribute = "quality";
     }
 
+    public void insertionSortByPrice() {
+        int n = data.size();
+        for (int i = 1; i < n; i++) {
+            Game key = data.get(i);
+            int j = i - 1;
+            while (j >= 0 && data.get(j).getPrice() > key.getPrice()) {
+                data.set(j + 1, data.get(j));
+                j--;
+            }
+            data.set(j + 1, key);
+        }
+        sortedByAttribute = "price";
+    }
+
+    public void insertionSortByCategory() {
+        int n = data.size();
+        for (int i = 1; i < n; i++) {
+            Game key = data.get(i);
+            int j = i - 1;
+            while (j >= 0 && data.get(j).getCategory().compareTo(key.getCategory()) > 0) {
+                data.set(j + 1, data.get(j));
+                j--;
+            }
+            data.set(j + 1, key);
+        }
+        sortedByAttribute = "category";
+    }
+
+    public void insertionSortByQuality() {
+        int n = data.size();
+        for (int i = 1; i < n; i++) {
+            Game key = data.get(i);
+            int j = i - 1;
+            while (j >= 0 && data.get(j).getQuality() > key.getQuality()) {
+                data.set(j + 1, data.get(j));
+                j--;
+            }
+            data.set(j + 1, key);
+        }
+        sortedByAttribute = "quality";
+    }
+
+    public void selectionSortByPrice() {
+        int n = data.size();
+        for (int i = 0; i < n - 1; i++) {
+            int minIdx = i;
+            for (int j = i + 1; j < n; j++) {
+                if (data.get(j).getPrice() < data.get(minIdx).getPrice()) {
+                    minIdx = j;
+                }
+            }
+            Game temp = data.get(minIdx);
+            data.set(minIdx, data.get(i));
+            data.set(i, temp);
+        }
+        sortedByAttribute = "price";
+    }
+
+    public void selectionSortByCategory() {
+        int n = data.size();
+        for (int i = 0; i < n - 1; i++) {
+            int minIdx = i;
+            for (int j = i + 1; j < n; j++) {
+                if (data.get(j).getCategory().compareTo(data.get(minIdx).getCategory()) < 0) {
+                    minIdx = j;
+                }
+            }
+            Game temp = data.get(minIdx);
+            data.set(minIdx, data.get(i));
+            data.set(i, temp);
+        }
+        sortedByAttribute = "category";
+    }
+
+    public void selectionSortByQuality() {
+        int n = data.size();
+        for (int i = 0; i < n - 1; i++) {
+            int minIdx = i;
+            for (int j = i + 1; j < n; j++) {
+                if (data.get(j).getQuality() < data.get(minIdx).getQuality()) {
+                    minIdx = j;
+                }
+            }
+            Game temp = data.get(minIdx);
+            data.set(minIdx, data.get(i));
+            data.set(i, temp);
+        }
+        sortedByAttribute = "quality";
+    }
+
 
     private int BusquedaporPrecio(int elprecioabuscar) {
         int izquierda = 0;
