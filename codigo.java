@@ -14,18 +14,37 @@ class Game{
         this.quality = quality;
     }
     public String getName(){
-        return name;
+      return name;
     }
     public String getCategory(){
-        return category;
+      return category;
     }
     public int getPrice(){
-        return price;
+      return price;
     }
     public int getQuality(){
-        return quality;
+      return quality;
 
+   }
+}
+
+class GenerateData{
+    String[] palabras = {"Dragon", "Empire", "Quest", "Galaxy", "Legends", "Warrior"}
+    String[] categorias = {"Acción", "Aventura", "Estrategia", "RPG", "Deportes", "Simulación"}
+    Random randin = new Random();
+
+    public ArrayList<Game> GenerateData(int NumeroJ){
+         ArrayList<Game> games = new ArrayList<>();
+         for (int i = 0; i < NumeroJ; i++){
+             int precio = randin.nextInt(70001);
+             int calidad = randin.nextInt(101);
+             games.add(new Game(palabras[randin.nextInt(palabras.length)],
+                                categorias[randin.nextInt(categorias.length)],
+                                precio, calidad));
+         }
+    return games;
     }
+
 }
 
 class Dataset{
@@ -37,25 +56,25 @@ class Dataset{
         this.sortedByAttribute = "none";
     }
 
-    private int BusquedaporPrecio(int elprecioabuscar){
-        int izquierda = 0;
-        int derecha = data.size()-1;
-        while (izquierda <= derecha){
-            int centro = izquierda + (derecha - izquierda)/2;
-            int actual = data.get(centro).getPrice();
+        private int BusquedaporPrecio(int elprecioabuscar){
+            int izquierda = 0;
+            int derecha = data.size()-1;
+            while (izquierda <= derecha){
+                int centro = izquierda + (derecha - izquierda)/2;
+                int actual = data.get(centro).getPrice();
 
-            if (actual == elprecioabuscar){
-                return centro;
-            }else if (actual > elprecioabuscar){
-                derecha = centro-1;
-            }else{
-                izquierda = centro+1;
+                if (actual == elprecioabuscar){
+                    return centro;
+                }else if (actual > elprecioabuscar){
+                    derecha = centro-1;
+                }else{
+                    izquierda = centro+1;
+                }
             }
+            return -1; // no se encuentra en la lista
         }
-        return -1; // no se encuentra en la lista
-    }
 
-    private int BusquedaporCategoria(String lacategoria){
+        private int BusquedaporCategoria(String lacategoria){
         int izquierda = 0;
         int derecha = data.size()-1;
         while (izquierda <= derecha){
@@ -69,7 +88,7 @@ class Dataset{
                 derecha = centro-1;
             }
         }
-        return -1;
+            return -1;
     }
 
     private int BusquedaporCalidad(int lacalidad){
@@ -125,7 +144,6 @@ class Dataset{
                 int derecha = indice+1;
 
                 while (izquierda >= 0 && data.get(izquierda).getPrice() == price){
-                    resultados.add(data.get(izquierda));
                     izquierda--;
                 }
                 while (derecha < data.size() && data.get(derecha).getPrice() == price){
@@ -134,35 +152,35 @@ class Dataset{
                 }
 
             }
-            //busqueda lienal si no estan ordenados
+        //busqueda lienal si no estan ordenados
         }else{
-            for (int i = 0; i < data.size(); i++){
-                if (data.get(i).getPrice() == price){
-                    resultados.add(data.get(i));
-                }
-            }
+          for (int i = 0; i < data.size(); i++){
+              if (data.get(i).getPrice() == price){
+                  resultados.add(data.get(i));
+              }
+          }
         }
         long timeF = System.nanoTime();
         long duration = (timeF - timeI);
         return resultados;
     }
 
-    public ArrayList<Game> getGamesByPriceRange(int lowerPrice, int higherPrice){
+    public ArrayList<Game> getGamesByPriceRange(int lowrPrice, int higherPrice){
         long timeI = System.nanoTime();
         ArrayList<Game> resultados = new ArrayList<>();
         if (sortedByAttribute.equals("precio")){
-            int inicio = BusquedaRangoprecio(lowerPrice, higherPrice);
-            if (inicio != -1){
-                for (int i = inicio; i < data.size() && data.get(i).getPrice() <= higherPrice; i++){
-                    resultados.add(data.get(i));
-                }
-            }
-            //busqueda lienal
+         int inicio = BusquedaRangoprecio(lowrPrice, higherPrice);
+         if (inicio != -1){
+             for (int i = inicio; i < data.size() && data.get(i).getPrice() <= higherPrice; i++){
+                 resultados.add(data.get(i));
+             }
+         }
+         //busqueda lienal
         }else{
             for (int i = 0; i < data.size(); i++){
                 Game juego = data.get(i);
                 int precio= juego.getPrice();
-                if (precio >= lowerPrice && precio <= higherPrice){
+                if (precio >= lowrPrice && precio <= higherPrice){
                     resultados.add(juego);
                 }
             }
@@ -179,7 +197,7 @@ class Dataset{
         if (sortedByAttribute.equals("category")){
             int indice = BusquedaporCategoria(category);
             if (indice != -1){
-                resultados.add(data.get(indice));
+             resultados.add(data.get(indice));
             }
 
             int izquierda = indice-1;
@@ -204,19 +222,8 @@ class Dataset{
         long timeF = System.nanoTime();
         long duration = (timeF - timeI);
         return resultados;
-    }
+}
 
-    private int comparar(Game j1, Game j2, String tipoatributo ){
-        switch (tipoatributo.toLowerCase()) {
-            case "precio":
-                return Integer.compare(j1.getPrice(), j2.getPrice());
-            case "calidad":
-                return Integer.compare(j1.getQuality(), j2.getQuality());
-            case "category":
-                return j1.getCategory().compareToIgnoreCase(j2.getCategory());
-            default:
-                throw new IllegalArgumentException("Atributo inválido: " + tipoatributo);
-        }
-    }
+ 
 
 }
