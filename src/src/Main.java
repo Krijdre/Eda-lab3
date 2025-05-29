@@ -520,15 +520,44 @@ class Dataset {
     }
 
     public void quickSortByCategory() {
-        quickSortByCategoryHelper(data, 0, data.size() - 1);
+        quickSortCategoryIterative(data, 0, data.size() - 1);
         sortedByAttribute = "category";
     }
 
-    private void quickSortByCategoryHelper(ArrayList<Game> arr, int low, int high) {
-        if (low < high) {
+    private void quickSortCategoryIterative(ArrayList<Game> arr, int low, int high) {
+        // Crear una pila auxiliar para almacenar los límites
+        int[] stack = new int[high - low + 1];
+        int top = -1;
+
+        // Empujar los límites iniciales
+        stack[++top] = low;
+        stack[++top] = high;
+
+        while (top >= 0) {
+            // Obtener los límites
+            high = stack[top--];
+            low = stack[top--];
+
+            if (high - low < 10) {
+                // Usar inserción para arrays pequeños
+                insertionSortCategoryRange(arr, low, high);
+                continue;
+            }
+
+            // Obtener el índice del pivote
             int pi = partitionCategory(arr, low, high);
-            quickSortByCategoryHelper(arr, low, pi - 1);
-            quickSortByCategoryHelper(arr, pi + 1, high);
+
+            // Si hay elementos a la izquierda del pivote, empujarlos
+            if (pi - 1 > low) {
+                stack[++top] = low;
+                stack[++top] = pi - 1;
+            }
+
+            // Si hay elementos a la derecha del pivote, empujarlos
+            if (pi + 1 < high) {
+                stack[++top] = pi + 1;
+                stack[++top] = high;
+            }
         }
     }
 
@@ -551,6 +580,21 @@ class Dataset {
 
         return i + 1;
     }
+
+
+    private void insertionSortCategoryRange(ArrayList<Game> arr, int low, int high) {
+        for (int i = low + 1; i <= high; i++) {
+            Game key = arr.get(i);
+            int j = i - 1;
+
+            while (j >= low && arr.get(j).getCategory().compareTo(key.getCategory()) > 0) {
+                arr.set(j + 1, arr.get(j));
+                j--;
+            }
+            arr.set(j + 1, key);
+        }
+    }
+
 
 
     private int BusquedaporPrecio(int elprecioabuscar) {
@@ -631,7 +675,7 @@ class Dataset {
         long timeI = System.nanoTime();
         ArrayList<Game> resultados = new ArrayList<>();
 
-        if (sortedByAttribute.equals("precio")) {
+        if (sortedByAttribute.equals("price")) {
             int indice = BusquedaporPrecio(price);
             if (indice != -1) {
                 resultados.add(data.get(indice));
@@ -665,7 +709,7 @@ class Dataset {
     public ArrayList<Game> getGamesByPriceRange(int lowrPrice, int higherPrice) {
         long timeI = System.nanoTime();
         ArrayList<Game> resultados = new ArrayList<>();
-        if (sortedByAttribute.equals("precio")) {
+        if (sortedByAttribute.equals("price")) {
             int inicio = BusquedaRangoprecio(lowrPrice, higherPrice);
             if (inicio != -1) {
                 for (int i = inicio; i < data.size() && data.get(i).getPrice() <= higherPrice; i++) {
@@ -743,17 +787,18 @@ public class Main {
         Dataset datasetOrdenado = new Dataset(games);
         Dataset dataset = new Dataset(games);
         long timeI = System.currentTimeMillis();
-        datasetOrdenado.sortByAlgorithm("quickSort", "price");
+        datasetOrdenado.sortByAlgorithm("mergeSort", "category");
         long timeF = System.currentTimeMillis();
         long timeT = timeF - timeI;
         System.out.println("Sorting Time: " + timeT + " milisegundos\n");
+        String categoria = "Shooter";
         timeI = System.currentTimeMillis();
-        ArrayList<Game> busquedalineal = dataset.getGamesByPriceRange(5000,10000);
+        ArrayList<Game> busquedalineal = dataset.getGamesByCategory(categoria);
         timeF = System.currentTimeMillis();
         timeT = timeF - timeI;
         System.out.println("Lineal Time : " + timeT + " milisegundos\n");
         timeI = System.currentTimeMillis();
-        ArrayList<Game> busquedabinaria = datasetOrdenado.getGamesByPriceRange(10000,15000);
+        ArrayList<Game> busquedabinaria = datasetOrdenado.getGamesByCategory(categoria);
         timeF = System.currentTimeMillis();
         timeT = timeF - timeI;
         System.out.println("Binary Time: " + timeT + " milisegundos\n");
