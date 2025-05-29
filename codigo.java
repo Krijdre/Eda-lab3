@@ -55,6 +55,63 @@ class Dataset {
         this.sortedByAttribute = "none";
     }
 
+    public void sortByAlgorithm(String algorithm, String attribute){
+        switch (algorithm) {
+            case "bubbleSort":
+                switch (attribute) {
+                    case "price":
+                        bubbleSortByPrice();
+                        break;
+                    case "category":
+                        bubbleSortByCategory();
+                        break;
+                    case "quality":
+                        bubbleSortByQuality();
+                        break;
+                }
+                break;
+            case "insertionSort":
+                switch (attribute) {
+                    case "price":
+                        insertionSortByPrice();
+                        break;
+                    case "category":
+                        insertionSortByCategory();
+                        break;
+                    case "quality":
+                        insertionSortByQuality();
+                        break;
+                }
+                break;
+            case "selectionSort":
+                switch (attribute) {
+                    case "price":
+                        selectionSortByPrice();
+                        break;
+                    case "category":
+                        selectionSortByCategory();
+                        break;
+                    case "quality":
+                        selectionSortByQuality();
+                        break;
+                }
+                break;
+            default:
+                switch (attribute) {
+                    case "price":
+                        collectionsSortByPrice();
+                        break;
+                    case "category":
+                        collectionsSortByCategory();
+                        break;
+                    case "quality":
+                        collectionsSortByQuality();
+                        break;
+                }
+                break;
+        }
+    }
+
     public void bubbleSortByPrice() {
         int n = data.size();
         for (int i = 0; i < n - 1; i++) {
@@ -374,5 +431,8 @@ class Dataset {
         return resultados;
     }
 
-    
+    public ArrayList<Game> getData() {
+        return data;
+    }
+
 }
