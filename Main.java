@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.*;
 
 class Game{
     private String name;
@@ -42,6 +43,44 @@ class GenerateData{
                                 precio, calidad));
          }
     return games;
+    }
+
+}
+class archivo{
+    public void saveGamesCVS(ArrayList<Game> games, String fileName){
+        try {
+            FileWriter fileWriter = new FileWriter(fileName);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write("GameName,category,price,quality\n");
+            for (Game juego : games) {
+                bufferedWriter.write(String.format("%s,%s,%d,%d\n",
+                        juego.getName(),
+                        juego.getCategory(),
+                        juego.getPrice(),
+                        juego.getQuality()));
+            }
+            bufferedWriter.close();
+        } catch (IOException e) {
+            System.out.println("Error al guardar el archivo: " + e.getMessage());
+        }
+    }
+
+    public ArrayList<Game> readGamesCVS(String fileName){
+        ArrayList<Game> games = new ArrayList<>();
+        try {
+            Scanner scanner = new Scanner(new File(fileName));
+            scanner.nextLine(); // Saltar la primera línea (encabezados)
+            while (scanner.hasNextLine()) {
+                String[] line = scanner.nextLine().split(",");
+                games.add(new Game(line[0], line[1],
+                        Integer.parseInt(line[2]),
+                        Integer.parseInt(line[3])));
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Error al leer el archivo: " + e.getMessage());
+        }
+        return games;
     }
 
 }
@@ -435,4 +474,13 @@ class Dataset {
         return data;
     }
 
+}
+
+public class Main {
+    public static void main(String[] args) {
+        GenerateData generador = new GenerateData();
+        ArrayList<Game> juegos = generador.GenerateData(100);
+        archivo archivo = new archivo();
+        archivo.saveGamesCVS(juegos, "10alas2.csv");
+    }
 }
