@@ -94,7 +94,7 @@ class Dataset {
         this.sortedByAttribute = "none";
     }
 
-    public void sortByAlgorithm(String algorithm, String attribute){
+    public void sortByAlgorithm(String algorithm, String attribute) {
         switch (algorithm) {
             case "bubbleSort":
                 switch (attribute) {
@@ -132,6 +132,32 @@ class Dataset {
                         break;
                     case "quality":
                         selectionSortByQuality();
+                        break;
+                }
+                break;
+            case "mergeSort":
+                switch (attribute) {
+                    case "price":
+                        mergeSortByPrice();
+                        break;
+                    case "category":
+                        mergeSortByCategory();
+                        break;
+                    case "quality":
+                        mergeSortByQuality();
+                        break;
+                }
+                break;
+            case "quickSort":
+                switch (attribute) {
+                    case "price":
+                        quickSortByPrice();
+                        break;
+                    case "category":
+                        quickSortByCategory();
+                        break;
+                    case "quality":
+                        quickSortByQuality();
                         break;
                 }
                 break;
@@ -299,6 +325,231 @@ class Dataset {
             data.set(i, temp);
         }
         sortedByAttribute = "quality";
+    }
+
+    public void mergeSortByPrice() {
+        ArrayList<Game> temp = new ArrayList<>(data);
+        mergeSortByPriceHelper(data, temp, 0, data.size() - 1);
+        sortedByAttribute = "price";
+    }
+
+    private void mergeSortByPriceHelper(ArrayList<Game> arr, ArrayList<Game> temp, int left, int right) {
+        if (left < right) {
+            int mid = (left + right) / 2;
+            mergeSortByPriceHelper(arr, temp, left, mid);
+            mergeSortByPriceHelper(arr, temp, mid + 1, right);
+            mergePriceArrays(arr, temp, left, mid, right);
+        }
+    }
+
+    private void mergePriceArrays(ArrayList<Game> arr, ArrayList<Game> temp, int left, int mid, int right) {
+        for (int i = left; i <= right; i++) {
+            temp.set(i, arr.get(i));
+        }
+
+        int i = left;
+        int j = mid + 1;
+        int k = left;
+
+        while (i <= mid && j <= right) {
+            if (temp.get(i).getPrice() <= temp.get(j).getPrice()) {
+                arr.set(k, temp.get(i));
+                i++;
+            } else {
+                arr.set(k, temp.get(j));
+                j++;
+            }
+            k++;
+        }
+
+        while (i <= mid) {
+            arr.set(k, temp.get(i));
+            k++;
+            i++;
+        }
+    }
+
+    public void mergeSortByCategory() {
+        ArrayList<Game> temp = new ArrayList<>(data);
+        mergeSortByCategoryHelper(data, temp, 0, data.size() - 1);
+        sortedByAttribute = "category";
+    }
+
+    private void mergeSortByCategoryHelper(ArrayList<Game> arr, ArrayList<Game> temp, int left, int right) {
+        if (left < right) {
+            int mid = (left + right) / 2;
+            mergeSortByCategoryHelper(arr, temp, left, mid);
+            mergeSortByCategoryHelper(arr, temp, mid + 1, right);
+            mergeCategoryArrays(arr, temp, left, mid, right);
+        }
+    }
+
+    private void mergeCategoryArrays(ArrayList<Game> arr, ArrayList<Game> temp, int left, int mid, int right) {
+        for (int i = left; i <= right; i++) {
+            temp.set(i, arr.get(i));
+        }
+
+        int i = left;
+        int j = mid + 1;
+        int k = left;
+
+        while (i <= mid && j <= right) {
+            if (temp.get(i).getCategory().compareTo(temp.get(j).getCategory()) <= 0) {
+                arr.set(k, temp.get(i));
+                i++;
+            } else {
+                arr.set(k, temp.get(j));
+                j++;
+            }
+            k++;
+        }
+
+        while (i <= mid) {
+            arr.set(k, temp.get(i));
+            k++;
+            i++;
+        }
+    }
+
+    public void mergeSortByQuality() {
+        ArrayList<Game> temp = new ArrayList<>(data);
+        mergeSortByQualityHelper(data, temp, 0, data.size() - 1);
+        sortedByAttribute = "quality";
+    }
+
+    private void mergeSortByQualityHelper(ArrayList<Game> arr, ArrayList<Game> temp, int left, int right) {
+        if (left < right) {
+            int mid = (left + right) / 2;
+            mergeSortByQualityHelper(arr, temp, left, mid);
+            mergeSortByQualityHelper(arr, temp, mid + 1, right);
+            mergeQualityArrays(arr, temp, left, mid, right);
+        }
+    }
+
+    private void mergeQualityArrays(ArrayList<Game> arr, ArrayList<Game> temp, int left, int mid, int right) {
+        for (int i = left; i <= right; i++) {
+            temp.set(i, arr.get(i));
+        }
+
+        int i = left;
+        int j = mid + 1;
+        int k = left;
+
+        while (i <= mid && j <= right) {
+            if (temp.get(i).getQuality() <= temp.get(j).getQuality()) {
+                arr.set(k, temp.get(i));
+                i++;
+            } else {
+                arr.set(k, temp.get(j));
+                j++;
+            }
+            k++;
+        }
+
+        while (i <= mid) {
+            arr.set(k, temp.get(i));
+            k++;
+            i++;
+        }
+    }
+
+    public void quickSortByQuality() {
+        quickSortByQualityHelper(data, 0, data.size() - 1);
+        sortedByAttribute = "quality";
+    }
+
+    private void quickSortByQualityHelper(ArrayList<Game> arr, int low, int high) {
+        if (low < high) {
+            int pi = partitionQuality(arr, low, high);
+            quickSortByQualityHelper(arr, low, pi - 1);
+            quickSortByQualityHelper(arr, pi + 1, high);
+        }
+    }
+
+    private int partitionQuality(ArrayList<Game> arr, int low, int high) {
+        int pivot = arr.get(high).getQuality();
+        int i = (low - 1);
+
+        for (int j = low; j < high; j++) {
+            if (arr.get(j).getQuality() <= pivot) {
+                i++;
+                Game temp = arr.get(i);
+                arr.set(i, arr.get(j));
+                arr.set(j, temp);
+            }
+        }
+
+        Game temp = arr.get(i + 1);
+        arr.set(i + 1, arr.get(high));
+        arr.set(high, temp);
+
+        return i + 1;
+    }
+
+    public void quickSortByPrice() {
+        quickSortByPriceHelper(data, 0, data.size() - 1);
+        sortedByAttribute = "price";
+    }
+
+    private void quickSortByPriceHelper(ArrayList<Game> arr, int low, int high) {
+        if (low < high) {
+            int pi = partitionPrice(arr, low, high);
+            quickSortByPriceHelper(arr, low, pi - 1);
+            quickSortByPriceHelper(arr, pi + 1, high);
+        }
+    }
+
+    private int partitionPrice(ArrayList<Game> arr, int low, int high) {
+        int pivot = arr.get(high).getPrice();
+        int i = (low - 1);
+
+        for (int j = low; j < high; j++) {
+            if (arr.get(j).getPrice() <= pivot) {
+                i++;
+                Game temp = arr.get(i);
+                arr.set(i, arr.get(j));
+                arr.set(j, temp);
+            }
+        }
+
+        Game temp = arr.get(i + 1);
+        arr.set(i + 1, arr.get(high));
+        arr.set(high, temp);
+
+        return i + 1;
+    }
+
+    public void quickSortByCategory() {
+        quickSortByCategoryHelper(data, 0, data.size() - 1);
+        sortedByAttribute = "category";
+    }
+
+    private void quickSortByCategoryHelper(ArrayList<Game> arr, int low, int high) {
+        if (low < high) {
+            int pi = partitionCategory(arr, low, high);
+            quickSortByCategoryHelper(arr, low, pi - 1);
+            quickSortByCategoryHelper(arr, pi + 1, high);
+        }
+    }
+
+    private int partitionCategory(ArrayList<Game> arr, int low, int high) {
+        String pivot = arr.get(high).getCategory();
+        int i = (low - 1);
+
+        for (int j = low; j < high; j++) {
+            if (arr.get(j).getCategory().compareTo(pivot) <= 0) {
+                i++;
+                Game temp = arr.get(i);
+                arr.set(i, arr.get(j));
+                arr.set(j, temp);
+            }
+        }
+
+        Game temp = arr.get(i + 1);
+        arr.set(i + 1, arr.get(high));
+        arr.set(high, temp);
+
+        return i + 1;
     }
 
 
@@ -478,9 +729,33 @@ class Dataset {
 
 public class Main {
     public static void main(String[] args) {
-        GenerateData generador = new GenerateData();
-        ArrayList<Game> juegos = generador.GenerateData(100);
+        /*GenerateData generador = new GenerateData();
+        ArrayList<Game> juegosGenerados = generador.GenerateData(1000000);
+
         archivo archivo = new archivo();
-        archivo.saveGamesCVS(juegos, "10alas2.csv");
+        String fileName = "10alas6.csv";
+        archivo.saveGamesCVS(juegosGenerados, fileName);*/
+
+
+        archivo archivo = new archivo();
+        String fileName = "10alas6.csv";
+        ArrayList<Game> games = archivo.readGamesCVS(fileName);
+        Dataset datasetOrdenado = new Dataset(games);
+        Dataset dataset = new Dataset(games);
+        long timeI = System.currentTimeMillis();
+        datasetOrdenado.sortByAlgorithm("quickSort", "price");
+        long timeF = System.currentTimeMillis();
+        long timeT = timeF - timeI;
+        System.out.println("Sorting Time: " + timeT + " milisegundos\n");
+        timeI = System.currentTimeMillis();
+        ArrayList<Game> busquedalineal = dataset.getGamesByPriceRange(5000,10000);
+        timeF = System.currentTimeMillis();
+        timeT = timeF - timeI;
+        System.out.println("Lineal Time : " + timeT + " milisegundos\n");
+        timeI = System.currentTimeMillis();
+        ArrayList<Game> busquedabinaria = datasetOrdenado.getGamesByPriceRange(10000,15000);
+        timeF = System.currentTimeMillis();
+        timeT = timeF - timeI;
+        System.out.println("Binary Time: " + timeT + " milisegundos\n");
     }
 }
